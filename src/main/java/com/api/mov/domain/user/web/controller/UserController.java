@@ -2,7 +2,7 @@ package com.api.mov.domain.user.web.controller;
 
 
 import com.api.mov.domain.user.servcie.UserService;
-import com.api.mov.domain.user.web.dto.UserSignUpReq;
+import com.api.mov.domain.user.web.dto.SignUpUserReq;
 import com.api.mov.global.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<SuccessResponse<?>> signUp(@RequestBody UserSignUpReq userSignUpReq){
-        userService.signUp(userSignUpReq);
+    public ResponseEntity<SuccessResponse<?>> signUp(@RequestBody SignUpUserReq signUpUserReq){
+        userService.signUp(signUpUserReq);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(SuccessResponse.success("회원가입에 성공했습니다"));
