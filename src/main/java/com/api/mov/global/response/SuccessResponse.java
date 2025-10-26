@@ -37,6 +37,10 @@ public class SuccessResponse<T>  extends BaseResponse {
         return new SuccessResponse<>(null, SuccessResponseCode.SUCCESS_CREATED,message);
     }
 
+    public static <T> SuccessResponse<T> success(T data) {
+        return new SuccessResponse<>(data, SuccessResponseCode.SUCCESS_CREATED);
+    }
+
     public static SuccessResponse<?> emptyCustom (String message) { // data X, message 커스텀
         return new SuccessResponse<>(null, SuccessResponseCode.SUCCESS_OK, message);
     }
