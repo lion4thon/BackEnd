@@ -2,7 +2,7 @@ package com.api.mov.domain.user.servcie;
 
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
-import com.api.mov.domain.user.web.dto.UserSignUpReq;
+import com.api.mov.domain.user.web.dto.SignUpUserReq;
 import com.api.mov.global.exception.CustomException;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +17,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void signUp(UserSignUpReq userSignUpReq) {
+    public void signUp(SignUpUserReq signUpUserReq) {
 
-        if(userRepository.existsByUsername(userSignUpReq.getUsername())) {
+        if(userRepository.existsByUsername(signUpUserReq.getUsername())) {
             throw new CustomException(UserErrorResponseCode.DUPLICATE_USERNAME_409);
         }
 
         User user = User.builder()
-                .username(userSignUpReq.getUsername())
-                .password(passwordEncoder.encode(userSignUpReq.getPassword()))
+                .username(signUpUserReq.getUsername())
+                .password(passwordEncoder.encode(signUpUserReq.getPassword()))
                 .build();
 
         userRepository.save(user);
