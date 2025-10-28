@@ -1,6 +1,7 @@
 package com.api.mov.domain.facility.entity;
 
 import com.api.mov.domain.user.entity.User;
+import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review {
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

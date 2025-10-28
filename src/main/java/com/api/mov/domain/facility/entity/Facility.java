@@ -1,6 +1,7 @@
 package com.api.mov.domain.facility.entity;
 
 
+import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Facility {
+public class Facility extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +26,12 @@ public class Facility {
 
     @Column(nullable = false)
     private String address; //시설 주소
+
+    @Column(nullable = false)
+    private String detailAddress; //상세 주소
+
+    @Column(nullable = false)
+    private String postCode; //우편 번호
 
     @Column(nullable = false)
     private Double rating = 0.0; //평균 평점
