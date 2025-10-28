@@ -1,26 +1,26 @@
-package com.api.mov.domain.facility.entity;
+package com.api.mov.domain.reservation.entity;
 
+import com.api.mov.domain.facility.entity.Facility;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review extends BaseEntity {
+public class Reservation extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private int rating; //별점 (1~5)
-
-    @Column(nullable = false)
-    private String comment; //후기 내용
+    private LocalDateTime reservationDateTime; //예약일시
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -29,4 +29,5 @@ public class Review extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
+
 }
