@@ -1,6 +1,7 @@
 package com.api.mov.domain.facility.entity;
 
 
+import com.api.mov.domain.reservation.entity.Reservation;
 import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,6 +41,9 @@ public class Facility extends BaseEntity {
 
     @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
 
 
     //평점 메서드
