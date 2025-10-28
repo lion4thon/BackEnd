@@ -3,15 +3,16 @@ package com.api.mov.domain.facility.entity;
 
 import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Facility extends BaseEntity {
 
     @Id
