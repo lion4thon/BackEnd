@@ -1,6 +1,7 @@
 package com.api.mov.domain.user.entity;
 
 import com.api.mov.domain.facility.entity.Review;
+import com.api.mov.domain.pass.entity.UserPass;
 import com.api.mov.domain.reservation.entity.Reservation;
 import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -35,4 +36,7 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserPass> userPassList = new ArrayList<>();
 }
