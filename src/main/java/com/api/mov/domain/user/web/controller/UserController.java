@@ -18,11 +18,4 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/users")
-    public ResponseEntity<SuccessResponse<?>> signUp(@RequestBody SignUpUserReq signUpUserReq){
-        userService.signUp(signUpUserReq);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(SuccessResponse.success("회원가입에 성공했습니다"));
-    }
 }
