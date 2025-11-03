@@ -24,7 +24,7 @@ public class FacilityController {
 
     @GetMapping("/facilities")
     public ResponseEntity<SuccessResponse<?>> getFacilities(@RequestParam String sportName,
-                                                            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+                                                            @PageableDefault(size = 4, sort = "id") Pageable pageable) {
 
         Page<FacilityRes> facilityResPage = facilityService.getFacilityList(sportName, pageable);
 
