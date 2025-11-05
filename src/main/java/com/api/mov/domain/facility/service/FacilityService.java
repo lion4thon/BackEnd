@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface FacilityService {
     Page<FacilityRes> getFacilityList(String sportName, Pageable pageable);
+    Page<FacilityRes> searchFacilities(String query, Pageable pageable);
     FacilityDetailRes getFacilityDetail(Long facilityId);
 }
