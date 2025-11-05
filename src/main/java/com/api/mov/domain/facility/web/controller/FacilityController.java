@@ -20,6 +20,7 @@ public class FacilityController {
 
     private final FacilityService facilityService;
 
+    //선택한 운동 종목으로 조회
     @GetMapping("/facilities")
     public ResponseEntity<SuccessResponse<?>> getFacilities(@RequestParam String sportName,
                                                             @PageableDefault(size = 4, sort = "id") Pageable pageable) {
@@ -31,8 +32,19 @@ public class FacilityController {
                 .body(SuccessResponse.ok(facilityResPage));
     }
 
+    //검색한 업장명으로 조회
+    @GetMapping("/facilities/search")
+    public ResponseEntity<SuccessResponse<?>> searchFacilities(@RequestParam String query,
+                                                               @PageableDefault(size = 4, sort = "id") Pageable pageable) {
+        Page<FacilityRes> facilityResPage = facilityService.searchFacilities(query, pageable);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.ok(facilityResPage));
+    }
+
+    //업장 상세정보 조회
     @GetMapping("/facilities/{facilityId}")
-    public ResponseEntity<SuccessResponse<?>> getFacility(@PathVariable Long facilityId) {
+    public ResponseEntity<SuccessResponse<?>> getFacilityDetail(@PathVariable Long facilityId) {
         FacilityDetailRes detail = facilityService.getFacilityDetail(facilityId);
         return ResponseEntity
                 .status(HttpStatus.OK)
