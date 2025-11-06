@@ -36,7 +36,7 @@ public class FacilityServiceImpl implements FacilityService {
     public Page<FacilityRes> searchFacilities(String query, Pageable pageable) {
         Page<Facility> facilityList = facilityRepository.findByNameContaining(query, pageable);
         if(facilityList.isEmpty()){
-            throw new CustomException(FacilityErrorResponseCode.NOT_FOUND_SEARCH_RESULTS);
+            throw new CustomException(FacilityErrorResponseCode.NOT_FOUND_SEARCH_RESULTS_404);
         }
         return facilityList.map(this::toFacilityRes);
     }
@@ -44,7 +44,7 @@ public class FacilityServiceImpl implements FacilityService {
     @Override
     public FacilityDetailRes getFacilityDetail(Long facilityId) {
         Facility facility = facilityRepository.findById(facilityId)
-                .orElseThrow(()-> new CustomException(FacilityErrorResponseCode.NOT_FOUND_FACILITY));
+                .orElseThrow(()-> new CustomException(FacilityErrorResponseCode.NOT_FOUND_FACILITY_404));
 
         return new FacilityDetailRes(
                 facility.getId(),
