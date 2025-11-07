@@ -66,7 +66,7 @@ public class Survey extends BaseEntity {
     //== DTO를 Entity로 변환하는 정적 팩토리 메소드 (생성 로직) ==//
     public static Survey createFromDto(CreateSurveyReq dto,User user, List<Sport> sports) {
         Survey survey = Survey.builder()
-                .user(User.builder().build())
+                .user(user)
                 .purpose(dto.getPurpose())
                 .preferredTime(dto.getPreferredTime())
                 .price(dto.getPrice())
