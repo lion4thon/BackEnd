@@ -5,6 +5,8 @@ import com.api.mov.domain.user.entity.User;
 import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import com.api.mov.domain.pass.entity.Sport;
+import com.api.mov.domain.survey.entity.InterestedSport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +64,7 @@ public class Survey extends BaseEntity {
     private List<InterestedSport> interestedSports = new ArrayList<>();
 
     //== DTO를 Entity로 변환하는 정적 팩토리 메소드 (생성 로직) ==//
-    public static Survey createFromDto(CreateSurveyReq dto) {
+    public static Survey createFromDto(CreateSurveyReq dto, List<Sport> sports) {
         Survey survey = Survey.builder()
                 .user(User.builder().build())
                 .purpose(dto.getPurpose())
@@ -86,14 +88,14 @@ public class Survey extends BaseEntity {
         }
 
         // InterestedSports (ID List -> Entity List) 변환 및 연관관계 설정
-        if (dto.getInterestedSportIds() != null) {
-            List<InterestedSport> sports = dto.getInterestedSportIds().stream()
-                    .map(sportId -> InterestedSport.builder()
-                            //.sportId(sportId)
+        if (sports != null) {
+            List<InterestedSport> interestedSportsList = sports.stream()
+                    .map(sport -> InterestedSport.builder()
+                            .sport(sport)   // Sport 엔티티를 InterestedSport에 연결
                             .survey(survey) // 연관관계 설정
                             .build())
                     .collect(Collectors.toList());
-            survey.interestedSports.addAll(sports);
+            survey.interestedSports.addAll(interestedSportsList);
         }
 
         return survey;
