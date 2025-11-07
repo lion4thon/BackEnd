@@ -64,7 +64,7 @@ public class Survey extends BaseEntity {
     private List<InterestedSport> interestedSports = new ArrayList<>();
 
     //== DTO를 Entity로 변환하는 정적 팩토리 메소드 (생성 로직) ==//
-    public static Survey createFromDto(CreateSurveyReq dto, List<Sport> sports) {
+    public static Survey createFromDto(CreateSurveyReq dto,User user, List<Sport> sports) {
         Survey survey = Survey.builder()
                 .user(User.builder().build())
                 .purpose(dto.getPurpose())

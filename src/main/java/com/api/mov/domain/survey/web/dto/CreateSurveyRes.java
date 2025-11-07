@@ -1,7 +1,6 @@
 package com.api.mov.domain.survey.web.dto;
 
 import com.api.mov.domain.survey.entity.AvoidFactor;
-import com.api.mov.domain.survey.entity.InterestedSport;
 import com.api.mov.domain.survey.entity.Survey;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public record CreateSurveyRes(
 ) {
 
     /**
-     * 💡 [오류 수정] 이 정적 팩토리 메소드가 누락되었습니다.
      * Survey 엔티티를 CreateSurveyRes DTO(Record)로 변환합니다.
      */
     public static CreateSurveyRes from(Survey survey) {
@@ -34,7 +32,7 @@ public record CreateSurveyRes(
 
         // 2. 자식 엔티티(List<InterestedSport>) -> 단순 데이터(List<Long>)로 변환
         List<Long> sportIds = survey.getInterestedSports().stream()
-                .map(InterestedSport::getSportId) // InterestedSport 엔티티에 getSportId() 필요
+                .map(is -> is.getSport().getId())
                 .collect(Collectors.toList());
 
         // 3. DTO(Record) 생성하여 반환
@@ -50,4 +48,5 @@ public record CreateSurveyRes(
                 factorNames,  // 변환된 리스트
                 sportIds      // 변환된 리스트
         );
+}
 }

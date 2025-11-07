@@ -6,6 +6,7 @@ import com.api.mov.domain.survey.entity.Survey;
 import com.api.mov.domain.survey.repository.SurveyRepository;
 import com.api.mov.domain.survey.web.dto.CreateSurveyReq;
 import com.api.mov.domain.survey.web.dto.CreateSurveyRes;
+import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
 import com.api.mov.global.response.code.sport.SportErrorResponseCode;
@@ -30,7 +31,7 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     @Transactional
     public CreateSurveyRes createSurvey(CreateSurveyReq createSurveyReq) {
-        userRepository.findById(createSurveyReq.getUserId())
+        User user =userRepository.findById(createSurveyReq.getUserId())
                 // 예외 커스텀 예정
                 .orElseThrow(() -> new CustomException(UserErrorResponseCode.NOT_FOUND_USER_404));
 
@@ -44,7 +45,7 @@ public class SurveyServiceImpl implements SurveyService {
         }
 
         // DTO 엔티티 변환
-        Survey survey = Survey.createFromDto(createSurveyReq);
+        Survey survey = Survey.createFromDto(createSurveyReq,user,sportEntities);
         // 설문 DB 저장
         Survey savedSurvey = surveyRepository.save(survey);
 
