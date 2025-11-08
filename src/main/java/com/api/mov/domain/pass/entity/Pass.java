@@ -1,16 +1,14 @@
 package com.api.mov.domain.pass.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,9 +28,11 @@ public class Pass {
     private String description; //패키지 설명
 
     @OneToMany(mappedBy = "pass", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<PassItem> passItems = new ArrayList<>();
 
     //유저 사이에 중간 매핑 테이블 필요
     @OneToMany(mappedBy = "pass", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<UserPass> userPassList = new ArrayList<>();
 }

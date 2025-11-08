@@ -1,5 +1,6 @@
 package com.api.mov.domain.pass.entity;
 
+import com.api.mov.domain.facility.entity.Facility;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,6 @@ public class PassItem {
     private Pass pass;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sport_id", nullable = false)
-    private Sport sport;
+    @JoinColumn(name = "facility_id", nullable = false)
+    private Facility facility;
 }
