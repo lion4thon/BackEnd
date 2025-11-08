@@ -20,6 +20,4 @@ public class Sport {
 //    @Column(nullable = false)
 //    private String tags; //종목 특징? 느낌?
 
-    @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PassItem> passItems = new ArrayList<>();
 }
