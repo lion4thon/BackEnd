@@ -25,4 +25,8 @@ public class UserPass {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pass_id", nullable = false)
     private Pass pass;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserPassStatus status;
 }
