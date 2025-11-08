@@ -14,6 +14,7 @@ import com.api.mov.global.exception.CustomException;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class PassServiceImpl implements PassService {
     private final UserPassRepository userPassRepository;
 
     @Override
+    @Transactional
     public void createPass(PassCreateReq passCreateReq, Long userId) {
 
         User user = userRepository.findById(userId)
