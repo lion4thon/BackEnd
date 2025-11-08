@@ -15,9 +15,6 @@ import java.util.List;
 @Builder
 public class CreateSurveyReq {
 
-    @NotNull(message = "사용자 ID는 필수입니다.")
-    private Long userId; // user_id
-
     @NotEmpty(message = "운동 목적은 필수입니다.")
     private String purpose; // 운동 목적
 

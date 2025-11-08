@@ -12,10 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateWellnessReportReq {
-    @NotNull(message = "사용자 ID는 필수입니다.")
-    private Long userId; // 작성자 ID
 
-    @NotNull(message = "종목 ID는 필수입니다.")
+    @NotNull(message = "패키지 ID는 필수입니다.")
     private Long passId; // 패키지 ID
 
     @NotEmpty(message = "운동 강도를 선택해주세요.")
