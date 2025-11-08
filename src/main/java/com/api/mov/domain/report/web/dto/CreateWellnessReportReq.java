@@ -1,0 +1,33 @@
+package com.api.mov.domain.report.web.dto;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateWellnessReportReq {
+    @NotNull(message = "사용자 ID는 필수입니다.")
+    private Long userId; // 작성자 ID
+
+    @NotNull(message = "종목 ID는 필수입니다.")
+    private Long sportId; // 운동 종목 ID (ERD 기반)
+
+    // TODO: [추후 추가] '패키지 ID' 또는 '완료한 패스 ID' (userPassId)가 필요함
+
+    @NotEmpty(message = "운동 강도를 선택해주세요.")
+    private String workoutIntensity;
+
+    @NotEmpty(message = "운동 후 컨디션을 선택해주세요.")
+    private String postWorkoutCondition;
+
+    private List<String> muscleActivationAreas;
+
+    private List<String> postWorkoutMood;
+
+    private String oneLineNote;}
