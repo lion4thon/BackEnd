@@ -30,10 +30,10 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     @Transactional
-    public CreateSurveyRes createSurvey(CreateSurveyReq createSurveyReq) {
-        User user =userRepository.findById(createSurveyReq.getUserId())
+    public CreateSurveyRes createSurvey(CreateSurveyReq createSurveyReq, Long userId) {
+        User user =userRepository.findById(userId)
                 // 예외 커스텀 예정
-                .orElseThrow(() -> new CustomException(UserErrorResponseCode.NOT_FOUND_USER_404));
+                .orElseThrow(() -> new CustomException(UserErrorResponseCode.USER_NOT_FOUND_404));
 
         // sportId 검증로직 추가 예정
         List<Sport> sportEntities = null;
