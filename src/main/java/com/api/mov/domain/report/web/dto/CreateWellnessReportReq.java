@@ -16,9 +16,7 @@ public class CreateWellnessReportReq {
     private Long userId; // 작성자 ID
 
     @NotNull(message = "종목 ID는 필수입니다.")
-    private Long sportId; // 운동 종목 ID (ERD 기반)
-
-    // TODO: [추후 추가] '패키지 ID' 또는 '완료한 패스 ID' (userPassId)가 필요함
+    private Long passId; // 패키지 ID
 
     @NotEmpty(message = "운동 강도를 선택해주세요.")
     private String workoutIntensity;

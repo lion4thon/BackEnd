@@ -80,7 +80,7 @@ public class OpenAiLlmServiceImpl implements LlmService {
         return String.format(
                 "다음은 사용자의 운동 후 감각 리포트 데이터입니다. 이 데이터를 분석하여 트레이너에게 제출할 수 있는 전문적인 리포트를 JSON 형식으로 생성해 주세요.\n\n" +
                         "### 사용자 입력 데이터\n" +
-                        "- **운동 종목**: %s\n" +
+                        "- **완료한 패키지**: %s\n" +
                         "- 운동 강도: %s\n" +
                         "- 운동 후 컨디션: %s\n" +
                         "- 주요 자극 부위: %s\n" +
@@ -99,7 +99,7 @@ public class OpenAiLlmServiceImpl implements LlmService {
                         "    - 다음 %s 세션을 위해 사용자가 고려할 수 있는 구체적인 팁이나 권장 사항 1~2가지 제시.",
 
                 // 데이터 매핑
-                report.getSport().getName(),
+                report.getPass().getName(),
                 report.getWorkoutIntensity(),
                 report.getPostWorkoutCondition(),
                 areas,
@@ -107,9 +107,9 @@ public class OpenAiLlmServiceImpl implements LlmService {
                 report.getOneLineNote(),
 
                 // 예시용 매핑
-                report.getSport().getName(), // title 예시
-                report.getSport().getName(), // content 분석
-                report.getSport().getName()  // feedback 팁
+                report.getPass().getName(), // title 예시
+                report.getPass().getName(), // content 분석
+                report.getPass().getName()  // feedback 팁
         );
     }
 

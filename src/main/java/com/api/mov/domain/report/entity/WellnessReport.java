@@ -1,6 +1,6 @@
 package com.api.mov.domain.report.entity;
 
-import com.api.mov.domain.pass.entity.Sport;
+import com.api.mov.domain.pass.entity.Pass;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.global.coverter.SimpleStringListConverter;
 import com.api.mov.global.entity.BaseEntity;
@@ -44,8 +44,8 @@ public class WellnessReport extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sport_id", nullable = false)
-    private Sport sport;
+    @JoinColumn(name = "pass_id", nullable = false)
+    private Pass pass;
 
     @Column(name = "report_title", columnDefinition = "TEXT")
     private String reportTitle; // 리포트 제목
