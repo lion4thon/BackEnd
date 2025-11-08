@@ -45,4 +45,13 @@ public class WellnessReport extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sport_id", nullable = false)
     private Sport sport;
+
+    @Column(name = "report_title", columnDefinition = "TEXT")
+    private String reportTitle; // 리포트 제목
+
+    @Column(name = "report_content", columnDefinition = "TEXT")
+    private String reportContent; // 리포트 내용
+
+    @Column(name = "report_feedback", columnDefinition = "TEXT")
+    private String reportFeedback; // 피드백 & 코멘트
 }
