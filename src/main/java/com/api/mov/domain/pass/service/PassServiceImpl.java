@@ -8,16 +8,20 @@ import com.api.mov.domain.pass.entity.UserPass;
 import com.api.mov.domain.pass.entity.UserPassStatus;
 import com.api.mov.domain.pass.repository.PassRepository;
 import com.api.mov.domain.pass.repository.UserPassRepository;
+import com.api.mov.domain.pass.web.dto.FacilityInPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
+import com.api.mov.domain.pass.web.dto.PassRes;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
+import com.api.mov.global.response.code.report.ReportErrorResponseCode;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +65,29 @@ public class PassServiceImpl implements PassService {
 
         userPassRepository.save(userPass);
 
+    }
+
+    @Override
+    public PassRes getPassDetail(Long passId) {
+        Pass pass = passRepository.findById(passId)
+                .orElseThrow(() -> new CustomException(ReportErrorResponseCode.NOT_FOUND_PASS));
+
+        List<FacilityInPassRes> facilityDtoList = pass.getPassItems().stream()
+                .map(PassItem::getFacility)
+                .map(facility -> new FacilityInPassRes(
+                        facility.getId(),
+                        facility.getName(),
+                        facility.getAddress(),
+                        facility.getSport().getName() // Sport 엔티티에서 종목명 조회
+                ))
+                .collect(Collectors.toList());
+
+        return new PassRes(
+                pass.getId(),
+                pass.getName(),
+                pass.getPrice(),
+                pass.getDescription(),
+                facilityDtoList
+        );
     }
 }
