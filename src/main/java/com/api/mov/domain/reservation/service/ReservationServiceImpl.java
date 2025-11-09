@@ -2,6 +2,8 @@ package com.api.mov.domain.reservation.service;
 
 import com.api.mov.domain.facility.entity.Facility;
 import com.api.mov.domain.facility.repository.FacilityRepository;
+import com.api.mov.domain.pass.entity.Pass;
+import com.api.mov.domain.pass.repository.PassRepository;
 import com.api.mov.domain.reservation.entity.Reservation;
 import com.api.mov.domain.reservation.entity.ReservationStatus;
 import com.api.mov.domain.reservation.repository.ReservationRepository;
@@ -10,6 +12,7 @@ import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
 import com.api.mov.global.response.code.facility.FacilityErrorResponseCode;
+import com.api.mov.global.response.code.pass.PassErrorResponseCode;
 import com.api.mov.global.response.code.reservation.ReservationErrorResponseCode;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final FacilityRepository facilityRepository;
+    private final PassRepository passRepository;
 
 
     @Override
@@ -36,6 +40,9 @@ public class ReservationServiceImpl implements ReservationService {
 
         Facility facility = facilityRepository.findById(reservationCreateReq.getFacilityId())
                 .orElseThrow(()->new CustomException(FacilityErrorResponseCode.NOT_FOUND_FACILITY_404));
+
+        Pass pass = passRepository.findById(reservationCreateReq.getPassId())
+                .orElseThrow(()-> new CustomException(PassErrorResponseCode.PASS_NOT_FOUND_404));
 
         //더블 부킹 체크
         List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(
@@ -52,6 +59,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = Reservation.builder()
                 .user(user)
                 .facility(facility)
+                .pass(pass)
                 .startTime(reservationCreateReq.getStartTime())
                 .endTime(reservationCreateReq.getEndTime())
                 .status(ReservationStatus.IN_CART)

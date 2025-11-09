@@ -7,7 +7,9 @@ import com.api.mov.domain.pass.entity.PassItem;
 import com.api.mov.domain.pass.entity.UserPass;
 import com.api.mov.domain.pass.repository.PassRepository;
 import com.api.mov.domain.pass.repository.UserPassRepository;
+import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
+import com.api.mov.domain.pass.web.dto.PassItemInfoRes;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
@@ -59,5 +61,30 @@ public class PassServiceImpl implements PassService {
 
         userPassRepository.save(userPass);
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MyPassRes> getMyPassList(Long userId) {
+        List<UserPass> userPassList = userPassRepository.findAllByUserIdWithDetails(userId);
+
+        return userPassList.stream()
+                .map(userPass -> {
+                    Pass pass = userPass.getPass();
+                    List<PassItemInfoRes> passItemInfoList = pass.getPassItems().stream()
+                            .map(passItem -> new PassItemInfoRes(
+                                    passItem.getFacility().getId(),
+                                    passItem.getFacility().getName(),
+                                    passItem.getFacility().getSport().getName()
+                            )).toList();
+
+                    return new MyPassRes(
+                            pass.getId(),
+                            pass.getName(),
+                            pass.getPrice(),
+                            pass.getDescription(),
+                            passItemInfoList
+                    );
+                }).toList();
     }
 }

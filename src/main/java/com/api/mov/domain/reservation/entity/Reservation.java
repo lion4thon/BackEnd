@@ -1,6 +1,7 @@
 package com.api.mov.domain.reservation.entity;
 
 import com.api.mov.domain.facility.entity.Facility;
+import com.api.mov.domain.pass.entity.Pass;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -34,5 +35,9 @@ public class Reservation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pass_id", nullable = false)
+    private Pass pass;
 
 }

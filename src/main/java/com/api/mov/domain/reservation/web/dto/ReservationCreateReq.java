@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class ReservationCreateReq {
 
     private Long facilityId;
+    private Long passId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 }
