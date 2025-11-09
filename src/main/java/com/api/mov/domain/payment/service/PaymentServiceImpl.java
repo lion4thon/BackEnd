@@ -29,6 +29,10 @@ public class PaymentServiceImpl implements PaymentService {
         List<Long> passIds = paymentReq.getPassId();
 
         List<UserPass> userPassList = userPassRepository.findAllByUserIdAndPassIdInWithPass(userId, passIds);
+
+        //passIds.size() => 사용자가 결제하겠다고 보내준 패키지 id의 개수
+        //서버에 있는 사용자의 패키지 중 해당하는 개수
+        // 이 개수가 다르다면 문제가 있다는 뜻 -> 즉시 프로세스 중단시키고 잘못된 요청이라는 것을 반환하는 방어 코드
         if(userPassList.size() != passIds.size()) {
             throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
         }
