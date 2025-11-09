@@ -2,6 +2,7 @@ package com.api.mov.domain.reservation.repository;
 
 import com.api.mov.domain.facility.entity.Facility;
 import com.api.mov.domain.reservation.entity.Reservation;
+import com.api.mov.domain.reservation.entity.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findOverlappingReservations(@Param("facility") Facility facility,
                                                   @Param("startTime") LocalDateTime startTime,
                                                   @Param("endTime") LocalDateTime endTime);
+
+    @Query("SELECT r FROM Reservation r JOIN FETCH r.pass WHERE r.user.id = :userId AND r.status = :status")
+    List<Reservation> findAllByUserIdAndStatusWithPass(@Param("userId") Long userId, @Param("status") ReservationStatus status);
 }
