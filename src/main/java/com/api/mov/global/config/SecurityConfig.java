@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/signup","api/auth/login").permitAll()
                         .requestMatchers("/api/facilities/**").hasRole("USER")
                         .requestMatchers("/api/reservations").hasRole("USER")
-                        .requestMatchers("/api/pass").hasRole("USER")
+                        .requestMatchers("/api/pass","/api/my-passes").hasRole("USER")
 
                         //나머지 요청은 인증 필요
                         .anyRequest().authenticated()
