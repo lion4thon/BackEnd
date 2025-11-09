@@ -33,7 +33,7 @@ public class SurveyServiceImpl implements SurveyService {
     public CreateSurveyRes createSurvey(CreateSurveyReq createSurveyReq) {
         User user =userRepository.findById(createSurveyReq.getUserId())
                 // 예외 커스텀 예정
-                .orElseThrow(() -> new CustomException(UserErrorResponseCode.NOT_FOUND_USER_404));
+                .orElseThrow(() -> new CustomException(UserErrorResponseCode.USER_NOT_FOUND_404));
 
         // sportId 검증로직 추가 예정
         List<Sport> sportEntities = null;
