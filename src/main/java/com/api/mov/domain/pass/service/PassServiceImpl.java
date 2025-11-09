@@ -73,6 +73,7 @@ public class PassServiceImpl implements PassService {
                     Pass pass = userPass.getPass();
                     List<PassItemInfoRes> passItemInfoList = pass.getPassItems().stream()
                             .map(passItem -> new PassItemInfoRes(
+                                    passItem.getFacility().getId(),
                                     passItem.getFacility().getName(),
                                     passItem.getFacility().getSport().getName()
                             )).toList();
