@@ -4,6 +4,7 @@ import com.api.mov.domain.facility.entity.Facility;
 import com.api.mov.domain.facility.web.dto.CreateReviewReq;
 import com.api.mov.domain.facility.web.dto.FacilityDetailRes;
 import com.api.mov.domain.facility.web.dto.FacilityRes;
+import com.api.mov.domain.facility.web.dto.GetReviewRes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,7 @@ public interface FacilityService {
 
     // 후기 작성메소드 추가
     void createReview(Long facilityId, Long userId, CreateReviewReq createReviewReq);
+
+    // 리뷰 조회 메소드
+    Page<GetReviewRes> getReviews(Long facilityId, Pageable pageable);
 }

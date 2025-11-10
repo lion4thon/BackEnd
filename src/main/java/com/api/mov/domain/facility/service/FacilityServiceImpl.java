@@ -7,6 +7,7 @@ import com.api.mov.domain.facility.repository.ReviewRepository;
 import com.api.mov.domain.facility.web.dto.CreateReviewReq;
 import com.api.mov.domain.facility.web.dto.FacilityDetailRes;
 import com.api.mov.domain.facility.web.dto.FacilityRes;
+import com.api.mov.domain.facility.web.dto.GetReviewRes;
 import com.api.mov.domain.pass.entity.Sport;
 import com.api.mov.domain.pass.entity.UserPass;
 import com.api.mov.domain.pass.entity.UserPassStatus;
@@ -107,8 +108,20 @@ public class FacilityServiceImpl implements FacilityService {
 
     }
 
+    @Override
+    @Transactional(readOnly = true) // [추가] getReviews 메소드 구현
+    public Page<GetReviewRes> getReviews(Long facilityId, Pageable pageable) {
+        // 시설이 존재하는지 확인
+        if (!facilityRepository.existsById(facilityId)) {
+            throw new CustomException(FacilityErrorResponseCode.NOT_FOUND_FACILITY_404);
+        }
 
+        // 레포지토리에서 리뷰 페이징 조회
+        Page<Review> reviewPage = reviewRepository.findAllByFacilityId(facilityId, pageable);
 
+        // Page<Review>를 Page<GetReviewRes>로 변환
+        return reviewPage.map(GetReviewRes::new); // GetReviewRes 생성자(Review entity) 호출
+    }
     private FacilityRes toFacilityRes(Facility facility) {
         return new FacilityRes(
                 facility.getId(),
