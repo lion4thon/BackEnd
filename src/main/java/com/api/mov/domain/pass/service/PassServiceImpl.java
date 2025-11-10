@@ -5,6 +5,7 @@ import com.api.mov.domain.facility.repository.FacilityRepository;
 import com.api.mov.domain.pass.entity.Pass;
 import com.api.mov.domain.pass.entity.PassItem;
 import com.api.mov.domain.pass.entity.UserPass;
+import com.api.mov.domain.pass.entity.UserPassStatus;
 import com.api.mov.domain.pass.repository.PassRepository;
 import com.api.mov.domain.pass.repository.UserPassRepository;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
@@ -57,6 +58,7 @@ public class PassServiceImpl implements PassService {
         UserPass userPass = UserPass.builder()
                 .user(user)
                 .pass(pass)
+                .status(UserPassStatus.IN_CART) // 상태 -> "IN_CART"
                 .build();
 
         userPassRepository.save(userPass);
