@@ -14,6 +14,7 @@ import com.api.mov.domain.pass.web.dto.PassItemInfoRes;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
+import com.api.mov.global.response.code.pass.PassErrorResponseCode;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,11 +55,21 @@ public class PassServiceImpl implements PassService {
         }
         passRepository.save(pass);
 
+        UserPassStatus status;
+        String storageType = passCreateReq.getStorageType().toUpperCase();
 
+        if ("CART".equals(storageType)) {
+            status = UserPassStatus.IN_CART;
+        } else if ("LOCKER".equals(storageType)) {
+            status = UserPassStatus.IN_LOCKER;
+        } else {
+            // 잘못된 storageType 값이 들어오면 예외 발생
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
         UserPass userPass = UserPass.builder()
                 .user(user)
                 .pass(pass)
-                .status(UserPassStatus.IN_CART) // 상태 -> "IN_CART"
+                .status(status) // 분기 처리된 status로 설정
                 .build();
 
         userPassRepository.save(userPass);
