@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PassService {
     void createPass(PassCreateReq passCreateReq, Long userId);
-    List<MyPassRes> getMyPassList(Long userId);
+    List<MyPassRes> getMyPassList(Long userId,String status);
 }

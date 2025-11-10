@@ -79,8 +79,20 @@ public class PassServiceImpl implements PassService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MyPassRes> getMyPassList(Long userId) {
-        List<UserPass> userPassList = userPassRepository.findAllByUserIdWithDetails(userId);
+    public List<MyPassRes> getMyPassList(Long userId,String status) {
+
+        UserPassStatus enumStatus;
+        try {
+            // 상태 enum 값을 문자열을 enum으로 변환
+            // 대소문자 구분 없이 처리하기 위해 toUpperCase() 사용
+            enumStatus = UserPassStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // 만약 "invalid_status" 같은 잘못된 값이 들어오면 예외 발생
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
+
+
+        List<UserPass> userPassList = userPassRepository.findByUserIdAndStatusWithPassDetails(userId,enumStatus);
 
         return userPassList.stream()
                 .map(userPass -> {
