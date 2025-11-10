@@ -19,7 +19,7 @@ import java.util.List;
 public class PassController {
 
     private final PassService passService;
-
+    // 패키지 생성 api
     @PostMapping("/pass")
     public ResponseEntity<SuccessResponse<?>> createPass(@RequestBody PassCreateReq passCreateReq,
                                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -28,7 +28,7 @@ public class PassController {
                 .status(HttpStatus.CREATED)
                 .body(SuccessResponse.success("패키지 생성을 성공했습니다."));
     }
-
+    // 패키지 조회 api
     @GetMapping("/my-passes")
     public ResponseEntity<SuccessResponse<?>> getMyPasses(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam("status") String status ) {
         List<MyPassRes> myPassRes = passService.getMyPassList(userPrincipal.getId(),status);
