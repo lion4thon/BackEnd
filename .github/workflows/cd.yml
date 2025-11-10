@@ -12,6 +12,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      IMAGE_NAME: mov-api
     steps:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
