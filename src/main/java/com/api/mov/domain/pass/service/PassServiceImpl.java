@@ -56,6 +56,7 @@ public class PassServiceImpl implements PassService {
         passRepository.save(pass);
 
         UserPassStatus status;
+        // 무조건 대문자로 인식(프론트에서 cart로 보내오면 인식이 안돼요->방지)
         String storageType = passCreateReq.getStorageType().toUpperCase();
 
         if ("CART".equals(storageType)) {
