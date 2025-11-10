@@ -1,6 +1,7 @@
 package com.api.mov.domain.payment.service;
 
 import com.api.mov.domain.pass.entity.UserPass;
+import com.api.mov.domain.pass.entity.UserPassStatus;
 import com.api.mov.domain.pass.repository.UserPassRepository;
 import com.api.mov.domain.payment.web.dto.PaymentReq;
 import com.api.mov.domain.payment.web.dto.PaymentRes;
@@ -42,6 +43,12 @@ public class PaymentServiceImpl implements PaymentService {
                 .sum();
 
         reservationRepository.updateStatusForPasses(passIds, ReservationStatus.IN_CART, ReservationStatus.CONFIRMED);
+
+        for (UserPass userPass : userPassList) {
+            if (userPass.getStatus() == UserPassStatus.IN_CART) {
+                userPass.setStatus(UserPassStatus.OWNED); // OWNED (진행 중)으로 변경
+            }
+        }
 
         return new PaymentRes(passIds, totalPrice);
     }

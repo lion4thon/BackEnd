@@ -5,6 +5,7 @@ import com.api.mov.domain.facility.repository.FacilityRepository;
 import com.api.mov.domain.pass.entity.Pass;
 import com.api.mov.domain.pass.entity.PassItem;
 import com.api.mov.domain.pass.entity.UserPass;
+import com.api.mov.domain.pass.entity.UserPassStatus;
 import com.api.mov.domain.pass.repository.PassRepository;
 import com.api.mov.domain.pass.repository.UserPassRepository;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
@@ -13,6 +14,7 @@ import com.api.mov.domain.pass.web.dto.PassItemInfoRes;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
+import com.api.mov.global.response.code.pass.PassErrorResponseCode;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,10 +55,22 @@ public class PassServiceImpl implements PassService {
         }
         passRepository.save(pass);
 
+        UserPassStatus status;
+        // 무조건 대문자로 인식(프론트에서 cart로 보내오면 인식이 안돼요->방지)
+        String storageType = passCreateReq.getStorageType().toUpperCase();
 
+        if ("CART".equals(storageType)) {
+            status = UserPassStatus.IN_CART;
+        } else if ("LOCKER".equals(storageType)) {
+            status = UserPassStatus.IN_LOCKER;
+        } else {
+            // 잘못된 storageType 값이 들어오면 예외 발생
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
         UserPass userPass = UserPass.builder()
                 .user(user)
                 .pass(pass)
+                .status(status) // 분기 처리된 status로 설정
                 .build();
 
         userPassRepository.save(userPass);
@@ -65,8 +79,20 @@ public class PassServiceImpl implements PassService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MyPassRes> getMyPassList(Long userId) {
-        List<UserPass> userPassList = userPassRepository.findAllByUserIdWithDetails(userId);
+    public List<MyPassRes> getMyPassList(Long userId,String status) {
+
+        UserPassStatus enumStatus;
+        try {
+            // 상태 enum 값을 문자열을 enum으로 변환
+            // 대소문자 구분 없이 처리하기 위해 toUpperCase() 사용
+            enumStatus = UserPassStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // 만약 "invalid_status" 같은 잘못된 값이 들어오면 예외 발생
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
+
+
+        List<UserPass> userPassList = userPassRepository.findByUserIdAndStatusWithPassDetails(userId,enumStatus);
 
         return userPassList.stream()
                 .map(userPass -> {

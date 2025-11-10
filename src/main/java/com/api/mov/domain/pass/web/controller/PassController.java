@@ -6,7 +6,6 @@ import com.api.mov.domain.pass.web.dto.PassCreateReq;
 import com.api.mov.global.jwt.UserPrincipal;
 import com.api.mov.global.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,8 +30,8 @@ public class PassController {
     }
 
     @GetMapping("/my-passes")
-    public ResponseEntity<SuccessResponse<?>> getMyPasses(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        List<MyPassRes> myPassRes = passService.getMyPassList(userPrincipal.getId());
+    public ResponseEntity<SuccessResponse<?>> getMyPasses(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam("status") String status ) {
+        List<MyPassRes> myPassRes = passService.getMyPassList(userPrincipal.getId(),status);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.ok(myPassRes));

@@ -1,9 +1,12 @@
 package com.api.mov.domain.facility.web.controller;
 
 import com.api.mov.domain.facility.service.FacilityService;
+import com.api.mov.domain.facility.web.dto.CreateReviewReq;
 import com.api.mov.domain.facility.web.dto.FacilityDetailRes;
 import com.api.mov.domain.facility.web.dto.FacilityRes;
+import com.api.mov.global.jwt.UserPrincipal;
 import com.api.mov.global.response.SuccessResponse;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -49,5 +53,19 @@ public class FacilityController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.ok(detail));
+    }
+
+    // 5. 후기 작성 API 엔드포인트 추가
+    @PostMapping("/facilities/{facilityId}/reviews")
+    public ResponseEntity<SuccessResponse<?>> createReview(
+            @PathVariable Long facilityId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @Valid @RequestBody CreateReviewReq createReviewReq) {
+
+        facilityService.createReview(facilityId, userPrincipal.getId(), createReviewReq);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(SuccessResponse.success("후기 작성을 성공했습니다."));
     }
 }
