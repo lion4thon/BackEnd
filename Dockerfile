@@ -2,6 +2,7 @@
 FROM gradle:jdk21 AS build
 WORKDIR /home/gradle/project
 COPY . .
+RUN chmod +x gradlew
 RUN ./gradlew build -x test
 
 # Stage 2: Create the final image
