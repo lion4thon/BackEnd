@@ -1,6 +1,7 @@
 package com.api.mov.domain.pass.repository;
 
 import com.api.mov.domain.pass.entity.UserPass;
+import com.api.mov.domain.pass.entity.UserPassStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,9 @@ public interface UserPassRepository extends JpaRepository<UserPass, Long> {
 
     @Query("SELECT up FROM UserPass up JOIN FETCH up.pass WHERE  up.user.id = :userId and up.pass.id IN :passIds")
     List<UserPass> findAllByUserIdAndPassIdInWithPass(@Param("userId")Long userId, @Param("passIds") List<Long> passIds);
+
+    // status로 UserPass를 조회하는 기능
+    @Query("SELECT up FROM UserPass up JOIN FETCH up.pass p JOIN FETCH p.passItems pi " +
+            "WHERE up.user.id = :userId AND up.status = :status")
+    List<UserPass> findByUserIdAndStatusWithPassDetails(@Param("userId") Long userId, @Param("status") UserPassStatus status);
 }
