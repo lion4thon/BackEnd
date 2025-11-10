@@ -1,0 +1,48 @@
+name: CD - Deploy to EC2
+
+on:
+  workflow_run:
+    workflows: ["CI - Build and Push Docker Image"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 環境 변수 설정
+            DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+            IMAGE_NAME=${{ env.IMAGE_NAME }}
+            CONTAINER_NAME=mov-api
+            ENV_FILE_PATH=/home/${{ secrets.EC2_USERNAME }}/.env
+
+            echo "CI/CD: [1/5] Creating .env file..."
+            echo "${{ secrets.ENV_FILE }}" > $ENV_FILE_PATH
+
+            echo "CI/CD: [2/5] Pulling latest Docker image..."
+            docker pull $DOCKER_USERNAME/$IMAGE_NAME:latest
+
+            echo "CI/CD: [3/5] Stopping and removing existing container..."
+            docker stop $CONTAINER_NAME || true
+            docker rm $CONTAINER_NAME || true
+
+            echo "CI/CD: [4/5] Starting new container..."
+            docker run -d --name $CONTAINER_NAME \
+              --env-file $ENV_FILE_PATH \
+              -p 8080:8080 \
+              $DOCKER_USERNAME/$IMAGE_NAME:latest
+
+            echo "CI/CD: [5/5] Cleaning up unused images..."
+            docker image prune -f
+
+            echo "CI/CD: Deployment complete."
