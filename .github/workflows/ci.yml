@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+  workflow_dispatch: # Actions 탭에서 수동 실행 버튼 제공(필요할 때 수동으로 돌릴 수 있게)
 env:
   IMAGE_NAME: mov-api
 
@@ -28,4 +28,4 @@ jobs:
           context: .
           # main 브랜치에 push될 때만 Docker Hub에 이미지를 푸시합니다.
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
