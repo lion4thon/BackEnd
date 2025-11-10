@@ -1,18 +1,31 @@
 package com.api.mov.domain.facility.service;
 
 import com.api.mov.domain.facility.entity.Facility;
+import com.api.mov.domain.facility.entity.Review;
 import com.api.mov.domain.facility.repository.FacilityRepository;
+import com.api.mov.domain.facility.repository.ReviewRepository;
+import com.api.mov.domain.facility.web.dto.CreateReviewReq;
 import com.api.mov.domain.facility.web.dto.FacilityDetailRes;
 import com.api.mov.domain.facility.web.dto.FacilityRes;
 import com.api.mov.domain.pass.entity.Sport;
+import com.api.mov.domain.pass.entity.UserPass;
+import com.api.mov.domain.pass.entity.UserPassStatus;
 import com.api.mov.domain.pass.repository.SportRepository;
+import com.api.mov.domain.pass.repository.UserPassRepository;
+import com.api.mov.domain.user.entity.User;
+import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
 import com.api.mov.global.response.code.facility.FacilityErrorResponseCode;
+import com.api.mov.global.response.code.review.ReviewErrorResponseCode;
 import com.api.mov.global.response.code.sport.SportErrorResponseCode;
+import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +33,9 @@ public class FacilityServiceImpl implements FacilityService {
 
     private final FacilityRepository facilityRepository;
     private final SportRepository sportRepository;
+    private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
+    private final UserPassRepository userPassRepository;
 
     @Override
     public Page<FacilityRes> getFacilityList(String sportName, Pageable pageable) {
@@ -61,6 +77,38 @@ public class FacilityServiceImpl implements FacilityService {
         );
     }
 
+    @Override
+    @Transactional
+    public void createReview(Long facilityId, Long userId, CreateReviewReq createReviewReq) {
+        // 사용자 검증
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(UserErrorResponseCode.USER_NOT_FOUND_404));
+        // 시설 검증
+        Facility facility = facilityRepository.findById(facilityId)
+                .orElseThrow(() -> new CustomException(FacilityErrorResponseCode.NOT_FOUND_FACILITY_404));
+
+        // 사용자가 이 시설을 완료했는지 검증
+        boolean hasCompleted = hasUserCompletedPackageAtFacility(userId, facilityId);
+        if (!hasCompleted) {
+            throw new CustomException(ReviewErrorResponseCode.PASS_NOT_COMPLETED);
+        }
+
+        // 중복 후기 작성 방지
+        if (reviewRepository.existsByUserIdAndFacilityId(userId, facilityId)) {
+            throw new CustomException(ReviewErrorResponseCode.REVIEW_ALREADY_EXISTS);
+        }
+
+        Review review = Review.builder()
+                .user(user)
+                .facility(facility)
+                .comment(createReviewReq.getComment())
+                .build();
+        reviewRepository.save(review);
+
+    }
+
+
+
     private FacilityRes toFacilityRes(Facility facility) {
         return new FacilityRes(
                 facility.getId(),
@@ -69,4 +117,21 @@ public class FacilityServiceImpl implements FacilityService {
                 facility.getPrice() // Facility 엔티티에 price 필드가 있다고 가정
         );
     }
+
+    private boolean hasUserCompletedPackageAtFacility(Long userId, Long facilityId) {
+        // 유저의 'COMPLETED' 상태인 UserPass 목록을 가져옴
+        List<UserPass> completedPasses = userPassRepository.findByUserIdAndStatusWithPassDetails(userId, UserPassStatus.COMPLETED);
+
+        if (completedPasses.isEmpty()) {
+            return false;
+        }
+
+        // 이 패키지들 중 하나라도 해당 facilityId를 포함하는지 확인
+        return completedPasses.stream()
+                .map(userPass -> userPass.getPass().getPassItems()) // List<List<PassItem>>
+                .flatMap(List::stream) // Stream<PassItem>
+                .map(passItem -> passItem.getFacility().getId()) // Stream<Long> (시설 ID)
+                .anyMatch(id -> id.equals(facilityId));
+    }
 }
+
