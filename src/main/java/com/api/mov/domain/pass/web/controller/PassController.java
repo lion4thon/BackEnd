@@ -1,6 +1,7 @@
 package com.api.mov.domain.pass.web.controller;
 
 import com.api.mov.domain.pass.service.PassService;
+import com.api.mov.domain.pass.web.dto.HomePassInfoRes;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
 import com.api.mov.global.jwt.UserPrincipal;
@@ -35,5 +36,19 @@ public class PassController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.ok(myPassRes));
+    }
+
+    //홈화면 패키지 조회
+    @GetMapping("/passes")
+    public ResponseEntity<SuccessResponse<?>> getPasses(
+            @RequestParam(required = false) String passName,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false, defaultValue = "LATEST") String sortBy
+    ){
+        List<HomePassInfoRes> homePassInfoResList = passService.getPasses(passName, minPrice, maxPrice, sortBy);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.ok(homePassInfoResList));
     }
 }
