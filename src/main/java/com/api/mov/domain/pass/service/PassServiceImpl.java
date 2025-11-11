@@ -8,6 +8,7 @@ import com.api.mov.domain.pass.entity.UserPass;
 import com.api.mov.domain.pass.entity.UserPassStatus;
 import com.api.mov.domain.pass.repository.PassRepository;
 import com.api.mov.domain.pass.repository.UserPassRepository;
+import com.api.mov.domain.pass.web.dto.HomePassInfoRes;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
 import com.api.mov.domain.pass.web.dto.PassItemInfoRes;
@@ -17,8 +18,11 @@ import com.api.mov.global.exception.CustomException;
 import com.api.mov.global.response.code.pass.PassErrorResponseCode;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -112,5 +116,64 @@ public class PassServiceImpl implements PassService {
                             passItemInfoList
                     );
                 }).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HomePassInfoRes> getPasses(String passName, Integer minPrice, Integer maxPrice, String sortBy) {
+        Sort sort = createSort(sortBy);
+
+        Specification<Pass> spec = ((root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
+
+        if(StringUtils.hasText(passName)){
+            spec = spec.and(hasName(passName));
+        }
+
+
+        if(minPrice != null || maxPrice != null){
+            spec = spec.and(isPriceBetween(minPrice, maxPrice));
+        }
+
+        List<Pass> passList = passRepository.findAll(spec, sort);
+
+        return passList.stream()
+                .map(pass -> new HomePassInfoRes(
+                        pass.getId(),
+                        pass.getName(),
+                        pass.getDescription(),
+                        pass.getPrice()
+                ))
+                .toList();
+    }
+
+
+
+    private Sort createSort(String sortBy){
+
+        return switch (sortBy.toUpperCase()){
+            case "PRICE_HIGH" -> Sort.by(Sort.Direction.DESC, "price");
+            case "PRICE_LOW" -> Sort.by(Sort.Direction.ASC, "price");
+            case "VIEW_COUNT" -> Sort.by(Sort.Direction.DESC, "viewCount");
+            default -> Sort.by(Sort.Direction.DESC, "createdAt");
+        };
+    }
+
+    private Specification<Pass> hasName(String passName){
+        return ((root, query, criteriaBuilder) ->
+                criteriaBuilder.like(root.get("name"), "%"+passName+"%"));
+    }
+
+
+    private Specification<Pass> isPriceBetween(Integer minPrice, Integer maxPrice){
+        return (root, query, criteriaBuilder) -> {
+            if(minPrice != null && maxPrice != null){
+                return criteriaBuilder.between(root.get("price"), minPrice, maxPrice);
+            } else if (minPrice != null){
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice);
+            } else if(maxPrice != null){
+                return criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice);
+            }
+            return criteriaBuilder.conjunction();
+        };
     }
 }
