@@ -141,8 +141,7 @@ public class PassServiceImpl implements PassService {
                         pass.getId(),
                         pass.getName(),
                         pass.getDescription(),
-                        pass.getPrice(),
-                        pass.getTags()
+                        pass.getPrice()
                 ))
                 .toList();
     }
