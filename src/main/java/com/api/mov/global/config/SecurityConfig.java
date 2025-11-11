@@ -5,6 +5,7 @@ import com.api.mov.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -41,7 +42,10 @@ public class SecurityConfig {
                         //로그인, 회원가입 API는 인증 없이 접근 허용
                         .requestMatchers("/api/auth/signup","api/auth/login").permitAll()
                         .requestMatchers("/api/passes").permitAll()
-                        .requestMatchers("/api/facilities/**").hasRole("USER")
+
+                        .requestMatchers(HttpMethod.GET,"/api/facilities/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/api/facilities/**").hasRole("USER")
+
                         .requestMatchers("/api/reservations").hasRole("USER")
                         .requestMatchers("/api/pass","/api/my-passes").hasRole("USER")
                         .requestMatchers("/api/summary").hasRole("USER")
