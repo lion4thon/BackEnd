@@ -1,5 +1,7 @@
 package com.api.mov.domain.pass.entity;
 
+import com.api.mov.global.coverter.SimpleStringListConverter;
+import com.api.mov.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pass {
+public class Pass extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +28,9 @@ public class Pass {
 
     @Column(nullable = false)
     private String description; //패키지 설명
+
+    @Column(nullable = false)
+    private Long viewCount = 0L;
 
     @OneToMany(mappedBy = "pass", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
