@@ -10,6 +10,7 @@ import com.api.mov.global.response.SuccessResponse;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Slf4j
 public class FacilityController {
 
     private final FacilityService facilityService;
@@ -33,6 +35,7 @@ public class FacilityController {
 
         Page<FacilityRes> facilityResPage = facilityService.getFacilityList(sportName, pageable);
 
+        log.info("컨트롤러 완료");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.ok(facilityResPage));

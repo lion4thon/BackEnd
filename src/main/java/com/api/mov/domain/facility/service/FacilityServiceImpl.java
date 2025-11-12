@@ -21,6 +21,7 @@ import com.api.mov.global.response.code.review.ReviewErrorResponseCode;
 import com.api.mov.global.response.code.sport.SportErrorResponseCode;
 import com.api.mov.global.response.code.user.UserErrorResponseCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FacilityServiceImpl implements FacilityService {
 
     private final FacilityRepository facilityRepository;
@@ -45,6 +47,8 @@ public class FacilityServiceImpl implements FacilityService {
                 .orElseThrow(() -> new CustomException(SportErrorResponseCode.NOT_FOUND_SPORT));
         
         Page<Facility> facilityList = facilityRepository.findBySportId(sport.getId(), pageable);
+
+        log.info("서비스 완료");
         
         return facilityList.map(this::toFacilityRes);
     }
