@@ -40,6 +40,7 @@ public class SecurityConfig {
                 //HTTP 요청 인가 규칙 설정
                 .authorizeHttpRequests(authorize -> authorize
                         //로그인, 회원가입 API는 인증 없이 접근 허용
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/signup","api/auth/login").permitAll()
                         .requestMatchers("/api/passes").permitAll()
 
