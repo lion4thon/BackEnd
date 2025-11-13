@@ -47,8 +47,6 @@ public class Facility extends BaseEntity {
     private String weekendHours; //주말 영업시간
     private String holidayClosedInfo; //휴무 안내
 
-    @Column(nullable = false)
-    private Double rating = 0.0; //평균 평점
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sport_id", nullable = false)
@@ -61,16 +59,4 @@ public class Facility extends BaseEntity {
     @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
-
-    //평점 메서드
-    public void updateRating() {
-        if (reviews == null || reviews.isEmpty()){
-            this.rating = 0.0;
-        } else {
-            this.rating = reviews.stream()
-                    .mapToDouble(Review::getRating)
-                    .average()
-                    .orElse(0.0);
-        }
-    }
 }
