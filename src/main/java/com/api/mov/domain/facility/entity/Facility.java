@@ -58,5 +58,4 @@ public class Facility extends BaseEntity {
     @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
-
 }
