@@ -1,0 +1,9 @@
+{
+  "purpose": "다이어트",
+  "preferred_time": "아침",
+  "preferred_intensity": "가벼운 웜업 위주",
+  "travel_time": "30분 이내",
+  "environment": "실내",
+  "preferred_sports": ["요가", "필라테스"],
+  "recovery_level": "보통/적당히 회복됨"
+}

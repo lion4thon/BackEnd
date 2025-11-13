@@ -7,10 +7,11 @@ on:
     branches: [ "main" ]
   workflow_dispatch: # Actions 탭에서 수동 실행 버튼 제공(필요할 때 수동으로 돌릴 수 있게)
 env:
-  IMAGE_NAME: mov-api
+  SPRING_IMAGE_NAME: mov-api
+  FASTAPI_IMAGE_NAME: mov-fastapi
 
 jobs:
-  build-and-push:
+  build-spring-boot:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,10 +23,30 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and conditionally push Docker image
+      - name: Build and conditionally push Spring Boot Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           # main 브랜치에 push될 때만 Docker Hub에 이미지를 푸시합니다.
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SPRING_IMAGE_NAME }}:latest
+
+  build-fastapi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and conditionally push FastAPI Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./ai_recommendation
+          # main 브랜치에 push될 때만 Docker Hub에 이미지를 푸시합니다.
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FASTAPI_IMAGE_NAME }}:latest

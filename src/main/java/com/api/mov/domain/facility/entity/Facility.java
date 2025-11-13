@@ -47,7 +47,6 @@ public class Facility extends BaseEntity {
     private String weekendHours; //주말 영업시간
     private String holidayClosedInfo; //휴무 안내
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sport_id", nullable = false)
     private Sport sport;

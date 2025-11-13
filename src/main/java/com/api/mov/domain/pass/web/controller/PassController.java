@@ -5,6 +5,7 @@ import com.api.mov.domain.pass.web.dto.HomePassInfoRes;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
 import com.api.mov.domain.pass.web.dto.PassDetailRes;
+import com.api.mov.domain.pass.web.dto.PassMetadataRes;
 import com.api.mov.global.jwt.UserPrincipal;
 import com.api.mov.global.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +61,12 @@ public class PassController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.ok(passDetailRes));
+    }
+
+    // AI 추천 시스템용 패키지 메타데이터 조회 api
+    @GetMapping("/passes/metadata")
+    public ResponseEntity<List<PassMetadataRes>> getPassMetadata() {
+        List<PassMetadataRes> metadata = passService.getAllPassMetadata();
+        return ResponseEntity.ok(metadata);
     }
 }
