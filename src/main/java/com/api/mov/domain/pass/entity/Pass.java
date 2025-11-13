@@ -32,6 +32,12 @@ public class Pass extends BaseEntity {
     @Column(nullable = false)
     private Long viewCount = 0L;
 
+    @Column
+    private String intensity;
+
+    @Column
+    private String purposeTag;
+
     @OneToMany(mappedBy = "pass", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<PassItem> passItems = new ArrayList<>();
