@@ -13,6 +13,7 @@ import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
 import com.api.mov.domain.pass.web.dto.PassDetailRes;
 import com.api.mov.domain.pass.web.dto.PassItemInfoRes;
+import com.api.mov.domain.pass.web.dto.PassMetadataRes;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
 import com.api.mov.global.exception.CustomException;
@@ -200,5 +201,14 @@ public class PassServiceImpl implements PassService {
                 pass.getPrice(),
                 passItemInfoList
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PassMetadataRes> getAllPassMetadata() {
+        List<Pass> passes = passRepository.findAll();
+        return passes.stream()
+                .map(PassMetadataRes::from)
+                .toList();
     }
 }

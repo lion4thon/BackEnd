@@ -5,6 +5,7 @@ import com.api.mov.domain.pass.web.dto.HomePassInfoRes;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
 import com.api.mov.domain.pass.web.dto.PassDetailRes;
+import com.api.mov.domain.pass.web.dto.PassMetadataRes;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface PassService {
     List<HomePassInfoRes> getPasses(String passName, Integer minPrice, Integer maxPrice, String sortBy);
 
     PassDetailRes getPassDetail(Long passId);
+
+    List<PassMetadataRes> getAllPassMetadata();
 }
