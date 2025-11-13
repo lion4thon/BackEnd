@@ -4,6 +4,7 @@ import com.api.mov.domain.facility.entity.Facility;
 import com.api.mov.domain.pass.web.dto.HomePassInfoRes;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
+import com.api.mov.domain.pass.web.dto.PassDetailRes;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface PassService {
     List<MyPassRes> getMyPassList(Long userId,String status);
 
     List<HomePassInfoRes> getPasses(String passName, Integer minPrice, Integer maxPrice, String sortBy);
+
+    PassDetailRes getPassDetail(Long passId);
 }
