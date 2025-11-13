@@ -30,6 +30,7 @@ public class Pass extends BaseEntity {
     private String description; //패키지 설명
 
     @Column(nullable = false)
+    @Builder.Default
     private Long viewCount = 0L;
 
     @Column
