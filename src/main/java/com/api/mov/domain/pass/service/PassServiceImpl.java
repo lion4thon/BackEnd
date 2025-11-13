@@ -11,6 +11,7 @@ import com.api.mov.domain.pass.repository.UserPassRepository;
 import com.api.mov.domain.pass.web.dto.HomePassInfoRes;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
+import com.api.mov.domain.pass.web.dto.PassDetailRes;
 import com.api.mov.domain.pass.web.dto.PassItemInfoRes;
 import com.api.mov.domain.user.entity.User;
 import com.api.mov.domain.user.repository.UserRepository;
@@ -175,5 +176,29 @@ public class PassServiceImpl implements PassService {
             }
             return criteriaBuilder.conjunction();
         };
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PassDetailRes getPassDetail(Long passId) {
+        // 패키지 조회
+        Pass pass = passRepository.findById(passId)
+                .orElseThrow(() -> new CustomException(PassErrorResponseCode.PASS_NOT_FOUND_404));
+
+        // 패키지에 포함된 시설 정보 변환
+        List<PassItemInfoRes> passItemInfoList = pass.getPassItems().stream()
+                .map(passItem -> new PassItemInfoRes(
+                        passItem.getFacility().getId(),
+                        passItem.getFacility().getName(),
+                        passItem.getFacility().getSport().getName()
+                )).toList();
+
+        return new PassDetailRes(
+                pass.getId(),
+                pass.getName(),
+                pass.getDescription(),
+                pass.getPrice(),
+                passItemInfoList
+        );
     }
 }
