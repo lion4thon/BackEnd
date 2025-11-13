@@ -4,6 +4,7 @@ import com.api.mov.domain.pass.service.PassService;
 import com.api.mov.domain.pass.web.dto.HomePassInfoRes;
 import com.api.mov.domain.pass.web.dto.MyPassRes;
 import com.api.mov.domain.pass.web.dto.PassCreateReq;
+import com.api.mov.domain.pass.web.dto.PassDetailRes;
 import com.api.mov.global.jwt.UserPrincipal;
 import com.api.mov.global.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,14 @@ public class PassController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.ok(homePassInfoResList));
+    }
+
+    // 패키지 상세 조회 api
+    @GetMapping("/passes/{passId}")
+    public ResponseEntity<SuccessResponse<?>> getPassDetail(@PathVariable Long passId) {
+        PassDetailRes passDetailRes = passService.getPassDetail(passId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.ok(passDetailRes));
     }
 }
