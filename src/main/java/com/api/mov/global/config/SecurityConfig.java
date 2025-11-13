@@ -43,6 +43,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/signup","api/auth/login").permitAll()
                         .requestMatchers("/api/passes").permitAll()
+                        .requestMatchers("/api/passes/metadata").permitAll() // AI 추천 시스템용
+                        .requestMatchers("/api/ai/recommendations").permitAll() // AI 추천 API
 
                         .requestMatchers(HttpMethod.GET,"/api/facilities/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST,"/api/facilities/**").hasRole("USER")
