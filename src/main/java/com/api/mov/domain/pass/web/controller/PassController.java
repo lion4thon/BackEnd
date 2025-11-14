@@ -8,6 +8,7 @@ import com.api.mov.domain.pass.web.dto.PassDetailRes;
 import com.api.mov.domain.pass.web.dto.PassMetadataRes;
 import com.api.mov.global.jwt.UserPrincipal;
 import com.api.mov.global.response.SuccessResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class PassController {
     private final PassService passService;
     // 패키지 생성 api
     @PostMapping("/pass")
-    public ResponseEntity<SuccessResponse<?>> createPass(@RequestBody PassCreateReq passCreateReq,
+    public ResponseEntity<SuccessResponse<?>> createPass(@Valid @RequestBody PassCreateReq passCreateReq,
                                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
         passService.createPass(passCreateReq, userPrincipal.getId());
         return ResponseEntity

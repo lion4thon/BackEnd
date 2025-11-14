@@ -43,14 +43,44 @@ public class PassServiceImpl implements PassService {
         User user = userRepository.findById(userId)
                 .orElseThrow(()->new CustomException(UserErrorResponseCode.USER_NOT_FOUND_404));
 
+        // storageType 검증을 가장 먼저 수행 (DB 저장 전)
+        String storageType = passCreateReq.getStorageType();
+        if (storageType == null || storageType.isBlank()) {
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
+        storageType = storageType.toUpperCase();
+
+        UserPassStatus status;
+        if ("CART".equals(storageType)) {
+            status = UserPassStatus.IN_CART;
+        } else if ("LOCKER".equals(storageType)) {
+            status = UserPassStatus.IN_LOCKER;
+        } else {
+            // 잘못된 storageType 값이 들어오면 예외 발생
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
+
+        // facilityIdList 검증
+        List<Long> facilityIdList = passCreateReq.getFacilityIdList();
+        if (facilityIdList == null || facilityIdList.isEmpty()) {
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
+        if (facilityIdList.size() > 3) {
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
+
+        List<Facility> facilityList = facilityRepository.findAllById(facilityIdList);
+        // 요청한 ID 개수와 실제 조회된 개수가 다르면 존재하지 않는 ID가 있음
+        if (facilityList.size() != facilityIdList.size()) {
+            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
+        }
+
         Pass pass = Pass.builder()
                 .name(passCreateReq.getPassName())
                 .price(passCreateReq.getPassPrice())
                 .description(passCreateReq.getPassDescription())
                 .build();
 
-
-        List<Facility> facilityList = facilityRepository.findAllById(passCreateReq.getFacilityIdList());
         for (Facility facility : facilityList){
             PassItem passItem = PassItem.builder()
                     .pass(pass)
@@ -61,22 +91,10 @@ public class PassServiceImpl implements PassService {
         }
         passRepository.save(pass);
 
-        UserPassStatus status;
-        // 무조건 대문자로 인식(프론트에서 cart로 보내오면 인식이 안돼요->방지)
-        String storageType = passCreateReq.getStorageType().toUpperCase();
-
-        if ("CART".equals(storageType)) {
-            status = UserPassStatus.IN_CART;
-        } else if ("LOCKER".equals(storageType)) {
-            status = UserPassStatus.IN_LOCKER;
-        } else {
-            // 잘못된 storageType 값이 들어오면 예외 발생
-            throw new CustomException(PassErrorResponseCode.INVALID_PASS_REQUEST_400);
-        }
         UserPass userPass = UserPass.builder()
                 .user(user)
                 .pass(pass)
-                .status(status) // 분기 처리된 status로 설정
+                .status(status)
                 .build();
 
         userPassRepository.save(userPass);
