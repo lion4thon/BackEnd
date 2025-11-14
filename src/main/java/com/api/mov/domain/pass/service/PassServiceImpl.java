@@ -79,6 +79,7 @@ public class PassServiceImpl implements PassService {
                 .name(passCreateReq.getPassName())
                 .price(passCreateReq.getPassPrice())
                 .description(passCreateReq.getPassDescription())
+                .imageUrl(passCreateReq.getImageUrl())
                 .build();
 
         for (Facility facility : facilityList){
@@ -133,7 +134,8 @@ public class PassServiceImpl implements PassService {
                             pass.getName(),
                             pass.getPrice(),
                             pass.getDescription(),
-                            passItemInfoList
+                            passItemInfoList,
+                            pass.getImageUrl()
                     );
                 }).toList();
     }
@@ -161,7 +163,8 @@ public class PassServiceImpl implements PassService {
                         pass.getId(),
                         pass.getName(),
                         pass.getDescription(),
-                        pass.getPrice()
+                        pass.getPrice(),
+                        pass.getImageUrl()
                 ))
                 .toList();
     }
@@ -217,7 +220,8 @@ public class PassServiceImpl implements PassService {
                 pass.getName(),
                 pass.getDescription(),
                 pass.getPrice(),
-                passItemInfoList
+                passItemInfoList,
+                pass.getImageUrl()
         );
     }
 

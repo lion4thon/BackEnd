@@ -7,6 +7,7 @@ public record PassDetailRes(
         String passName,
         String passDescription,
         int passPrice,
-        List<PassItemInfoRes> passItems
+        List<PassItemInfoRes> passItems,
+        String imageUrl
 ) {
 }
