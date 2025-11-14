@@ -16,4 +16,6 @@ public class PassCreateReq {
 
     @NotBlank(message = "저장 타입을 선택해주세요. (CART or LOCKER)")
     private String storageType;
+
+    private String imageUrl; // 패키지 이미지 URL (선택사항)
 }

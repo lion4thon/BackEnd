@@ -39,6 +39,9 @@ public class Pass extends BaseEntity {
     @Column
     private String purposeTag;
 
+    @Column
+    private String imageUrl; //패키지 대표 이미지 URL
+
     @OneToMany(mappedBy = "pass", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<PassItem> passItems = new ArrayList<>();
