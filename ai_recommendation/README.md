@@ -244,6 +244,4 @@ python -m models.trainer  # 모델 재학습
 - `requirements.txt` 파일 확인
 - `.dockerignore`에 `venv/` 포함되었는지 확인
 
-## 라이선스
 
-이 프로젝트는 해커톤용으로 제작되었습니다.
