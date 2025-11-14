@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AIRecommendationRes {
+
+    // imageUrl setter (enrichment용)
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     @JsonProperty("pass_id")
     private Long passId;
 
@@ -23,4 +28,7 @@ public class AIRecommendationRes {
 
     @JsonProperty("predicted_score")
     private Double predictedScore;
+
+    @JsonProperty("image_url")
+    private String imageUrl;
 }
