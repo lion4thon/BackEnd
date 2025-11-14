@@ -4,6 +4,7 @@ public record FacilityRes(
         Long id,
         String name,
         String address,
-        int price
+        int price,
+        String imageUrl
 ) {
 }
