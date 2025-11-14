@@ -41,6 +41,9 @@ public class Facility extends BaseEntity {
     @Column(nullable = false)
     private String postCode; //우편 번호
 
+    @Column
+    private String imageUrl; //시설 대표 이미지 URL
+
     private String Features; //업장 특징
 
     private String weekdayHours; //주간 영업시간

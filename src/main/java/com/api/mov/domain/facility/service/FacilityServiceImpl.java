@@ -78,7 +78,8 @@ public class FacilityServiceImpl implements FacilityService {
                 facility.getWeekdayHours(),
                 facility.getWeekendHours(),
                 facility.getHolidayClosedInfo(),
-                facility.getAccessGuide()
+                facility.getAccessGuide(),
+                facility.getImageUrl()
         );
     }
 
@@ -131,7 +132,8 @@ public class FacilityServiceImpl implements FacilityService {
                 facility.getId(),
                 facility.getName(),
                 facility.getAddress(),
-                facility.getPrice() // Facility 엔티티에 price 필드가 있다고 가정
+                facility.getPrice(),
+                facility.getImageUrl()
         );
     }
 
